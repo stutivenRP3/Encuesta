@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Encuesta de Satisfacción - Soporte</title>
+</head>
+<body>
+  <h2>Encuesta de Satisfacción - Servicio de Soporte</h2>
+  <form method="POST" action="https://c695-190-216-215-132.ngrok-free.app/webhook/recibir-encuesta">
+    <p>1. ¿Cómo calificarías la calidad general del servicio de soporte en los últimos 6 meses?</p>
+    <label><input type="radio" name="q1" value="Excelente"> Excelente</label>
+    <label><input type="radio" name="q1" value="Bueno"> Bueno</label>
+    <label><input type="radio" name="q1" value="Normal"> Normal</label>
+    <label><input type="radio" name="q1" value="Malo"> Malo</label>
+
+    <p>2. ¿Qué tan satisfecho estás con los tiempos de respuesta?</p>
+    <label><input type="radio" name="q2" value="Excelente"> Excelente</label>
+    <label><input type="radio" name="q2" value="Bueno"> Bueno</label>
+    <label><input type="radio" name="q2" value="Normal"> Normal</label>
+    <label><input type="radio" name="q2" value="Malo"> Malo</label>
+
+    <p>3. ¿Qué tan efectivo te pareció el proceso de resolución de incidentes?</p>
+    <label><input type="radio" name="q3" value="Excelente"> Excelente</label>
+    <label><input type="radio" name="q3" value="Bueno"> Bueno</label>
+    <label><input type="radio" name="q3" value="Normal"> Normal</label>
+    <label><input type="radio" name="q3" value="Malo"> Malo</label>
+
+    <p>4. ¿Considerás que el equipo es proactivo ante incidencias recurrentes?</p>
+    <label><input type="radio" name="q4" value="Excelente"> Excelente</label>
+    <label><input type="radio" name="q4" value="Bueno"> Bueno</label>
+    <label><input type="radio" name="q4" value="Normal"> Normal</label>
+    <label><input type="radio" name="q4" value="Malo"> Malo</label>
+
+    <p>5. ¿Te sentís informado sobre el estado de los tickets durante el proceso?</p>
+    <label><input type="radio" name="q5" value="Excelente"> Excelente</label>
+    <label><input type="radio" name="q5" value="Bueno"> Bueno</label>
+    <label><input type="radio" name="q5" value="Normal"> Normal</label>
+    <label><input type="radio" name="q5" value="Malo"> Malo</label>
+
+    <p>6. ¿Cómo calificarías la comunicación y el trato del equipo de soporte?</p>
+    <label><input type="radio" name="q6" value="Excelente"> Excelente</label>
+    <label><input type="radio" name="q6" value="Bueno"> Bueno</label>
+    <label><input type="radio" name="q6" value="Normal"> Normal</label>
+    <label><input type="radio" name="q6" value="Malo"> Malo</label>
+
+    <p>7. ¿Qué sugerencias tenés para mejorar el servicio?</p>
+    <textarea name="q7" rows="4" cols="50" placeholder="Escribí tus sugerencias aquí..."></textarea>
+
+    <br><br>
+    <input type="submit" value="Enviar encuesta">
+  </form>
+</body>
+</html>
