@@ -6,49 +6,74 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>Encuesta de Satisfacción - Servicio de Soporte</h2>
-  <form method="POST" action="http://localhost:5678/webhook/recibir-encuesta">
+  <div class="form-container">
+    <h2>Encuesta de Satisfacción - Servicio de Soporte</h2>
+ 
+    <p class="descripcion">
+      Por favor, completá esta encuesta para ayudarnos a mejorar la calidad de nuestro servicio de soporte. Tus respuestas son confidenciales y muy valiosas para nosotros.
+    </p>
+  
+    <form method="POST" action="http://localhost:5678/webhook-test/recibir-encuesta">
+
+    <input type="hidden" name="usuario" value="stutiven">
+    <input type="hidden" name="fecha" value="Fecha" id="fecha">
     <p>1. ¿Cómo calificarías la calidad general del servicio de soporte en los últimos 6 meses?</p>
+    <input type="hidden" name="p1" value="¿Cómo calificarías la calidad general del servicio de soporte en los últimos 6 meses?">
     <label><input type="radio" name="q1" value="Excelente"> Excelente</label>
     <label><input type="radio" name="q1" value="Bueno"> Bueno</label>
     <label><input type="radio" name="q1" value="Normal"> Normal</label>
     <label><input type="radio" name="q1" value="Malo"> Malo</label>
 
+
     <p>2. ¿Qué tan satisfecho estás con los tiempos de respuesta?</p>
+    <input type="hidden" name="p2" value="¿Qué tan satisfecho estás con los tiempos de respuesta?">
     <label><input type="radio" name="q2" value="Excelente"> Excelente</label>
     <label><input type="radio" name="q2" value="Bueno"> Bueno</label>
     <label><input type="radio" name="q2" value="Normal"> Normal</label>
     <label><input type="radio" name="q2" value="Malo"> Malo</label>
 
     <p>3. ¿Qué tan efectivo te pareció el proceso de resolución de incidentes?</p>
+    <input type="hidden" name="p3" value="¿Qué tan efectivo te pareció el proceso de resolución de incidentes?">
     <label><input type="radio" name="q3" value="Excelente"> Excelente</label>
     <label><input type="radio" name="q3" value="Bueno"> Bueno</label>
     <label><input type="radio" name="q3" value="Normal"> Normal</label>
     <label><input type="radio" name="q3" value="Malo"> Malo</label>
 
     <p>4. ¿Considerás que el equipo es proactivo ante incidencias recurrentes?</p>
+    <input type="hidden" name="p4" value="¿Considerás que el equipo es proactivo ante incidencias recurrentes?">
     <label><input type="radio" name="q4" value="Excelente"> Excelente</label>
     <label><input type="radio" name="q4" value="Bueno"> Bueno</label>
     <label><input type="radio" name="q4" value="Normal"> Normal</label>
     <label><input type="radio" name="q4" value="Malo"> Malo</label>
 
-    <p>5. ¿Te sentís informado sobre el estado de los tickets durante el proceso?</p>
+    <p>5. ¿Se siente informado sobre el estado de los tickets durante el proceso?</p>
+    <input type="hidden" name="p5" value="¿Se siente informado sobre el estado de los tickets durante el proceso?">
     <label><input type="radio" name="q5" value="Excelente"> Excelente</label>
     <label><input type="radio" name="q5" value="Bueno"> Bueno</label>
     <label><input type="radio" name="q5" value="Normal"> Normal</label>
     <label><input type="radio" name="q5" value="Malo"> Malo</label>
 
     <p>6. ¿Cómo calificarías la comunicación y el trato del equipo de soporte?</p>
+    <input type="hidden" name="p6" value="¿Cómo calificarías la comunicación y el trato del equipo de soporte?">
     <label><input type="radio" name="q6" value="Excelente"> Excelente</label>
     <label><input type="radio" name="q6" value="Bueno"> Bueno</label>
     <label><input type="radio" name="q6" value="Normal"> Normal</label>
     <label><input type="radio" name="q6" value="Malo"> Malo</label>
 
-    <p>7. ¿Qué sugerencias tenés para mejorar el servicio?</p>
+    <p>7. ¿Qué sugerencias tiene para mejorar el servicio?</p>
+    <input type="hidden" name="p7" value="¿Qué sugerencias tiene para mejorar el servicio?">
     <textarea name="q7" rows="4" cols="50" placeholder="Escribí tus sugerencias aquí..."></textarea>
 
     <br><br>
     <input type="submit" value="Enviar encuesta">
+
+    <script>
+        // Capturar la fecha al cargar el formulario
+        const now = new Date();
+        const fechaLocal = now.toLocaleString('sv-SE'); // Formato YYYY-MM-DDTHH:mm:ss
+        document.getElementById('fecha').value = fechaLocal;
+      </script>
   </form>
+</div>
 </body>
 </html>
