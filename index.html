@@ -17,6 +17,8 @@
 
     <input type="hidden" name="usuario" value="stutiven">
     <input type="hidden" name="fecha" value="Fecha" id="fecha">
+    <input type="hidden" name="token" id="token">
+
     <p>1. ¿Cómo calificarías la calidad general del servicio de soporte en los últimos 6 meses?</p>
     <input type="hidden" name="p1" value="¿Cómo calificarías la calidad general del servicio de soporte en los últimos 6 meses?">
     <label><input type="radio" name="q1" value="Excelente"> Excelente</label>
@@ -72,6 +74,21 @@
         const now = new Date();
         const fechaLocal = now.toLocaleString('sv-SE'); // Formato YYYY-MM-DDTHH:mm:ss
         document.getElementById('fecha').value = fechaLocal;
+      
+      // Función para obtener parámetros de la URL
+  function getTokenFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('token');
+  }
+
+  // Asignar token al campo oculto
+  document.addEventListener("DOMContentLoaded", () => {
+    const tokenField = document.getElementById("token");
+    const token = getTokenFromUrl();
+    if (tokenField && token) {
+      tokenField.value = token;
+    }
+  });
       </script>
   </form>
 </div>
