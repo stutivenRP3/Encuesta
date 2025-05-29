@@ -1,96 +1,538 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Encuesta de Satisfacción - Soporte</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Encuesta de Calidad del Servicio de Soporte</title>
+  <style>
+    /* --- Estilos generales y preguntas --- */
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url('Fondo2.png'); /* ← ruta relativa a index.html */
+  background-size: contain;       /* Ajusta la imagen para cubrir toda la pantalla */
+  background-position: center;  /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que se repita */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+    .survey-container {
+      width: 100%;
+      max-width: 600px;
+      background-color: #ffffff;
+      border-radius: 8px #3380ff;
+      box-shadow: 0px 0px 2px #3380ff;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .question {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    .question.active {
+      display: block;
+      animation: slideIn 0.5s ease-in-out;
+    }
+
+    .question label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    .question input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      resize: vertical;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .button {
+      background-color: #4169E1;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    .button:hover {
+      background-color: #000;
+    }
+
+    .button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .submit-button-container {
+      text-align: center;
+    }
+
+    .submit-button {
+      background-color: #000;
+      color: white;
+    }
+
+    .submit-button:hover {
+      background-color: #333;
+    }
+
+    .thank-you-message, .already-submitted-message {
+      text-align: center;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .thank-you-message {
+      color: #4169E1;
+      background-color: #fff;
+      border: 2px solid #4169E1;
+    }
+
+    .already-submitted-message {
+      color: red;
+      background-color: #ffebee;
+      border: 1px solid #f44336;
+    }
+
+    .success-icon {
+      font-size: 3em;
+      color: #4169E1;
+      margin-bottom: 10px;
+    }
+
+    @keyframes slideIn {
+      0% { opacity: 0; transform: translateX(-20px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    .question.error {
+      border: 2px solid red;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    .shake {
+      animation: shake 0.3s;
+    }
+
+    .scale-container {
+      display: flex;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .scale-option {
+      flex: 1;
+      cursor: pointer;
+      border-left: 1px solid #ccc;
+      background-color: #fff;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .scale-option:first-child {
+      border-left: none;
+    }
+
+    .scale-option input {
+      display: none;
+    }
+
+    .scale-option span {
+      display: block;
+      padding: 8px 0;
+      font-size: 0.9em;
+    }
+
+    .scale-option input:checked + span {
+      background-color: #4169E1;
+      color: white;
+    }
+
+    .scale-container::before,
+    .scale-container::after {
+      position: absolute;
+      top: -20px;
+      font-size: 0.9em;
+      color: #888;
+    }
+
+    .scale-container::before {
+      content: 'Nada probable';
+      left: 0;
+    }
+
+    .scale-container::after {
+      content: 'Muy probable';
+      right: 0;
+    }
+  </style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>Encuesta de Satisfacción - Servicio de Soporte</h2>
- 
-    <p class="descripcion">
-      Por favor, completá esta encuesta para ayudarnos a mejorar la calidad de nuestro servicio de soporte. Tus respuestas son confidenciales y muy valiosas para nosotros.
-    </p>
-  
-    <form method="POST" action="http://localhost:5678/webhook/recibir-encuesta">
+  <div class="survey-container">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <img src="https://rp3.com.ec/wp-content/themes/rp3/images/rp3-logo.png" alt="Logo RP3" style="height: 80px;">
+     <h1 style="margin: 0; font-family: 'Arial', sans-serif; color: #003366; font-weight: bold;">
+        Evaluación de Servicio de Soporte
+    </h1>
+    <br>
+    </div>
+    <div id="surveyContent">
+      <!-- http://localhost:5678/webhook-test/surveyForm -->
+      <form id="surveyFormMensual" method="POST" action="http://localhost:5678/webhook-test/surveyFormMensual">
+        <!-- Preguntas 1 a 6 -->
+         <input type="hidden" name="IdUsuario" id="IdUsuario">
+         <input type="hidden" name="Nombre" id="Nombre">
+         <input type="hidden" name="Apellido" id="Apellido">
+         <input type="hidden" name="Departamento" id="Departamento">
+         <input type="hidden" name="Token" id="Token">
 
-    <input type="hidden" name="usuario" value="stutiven">
-    <input type="hidden" name="fecha" value="Fecha" id="fecha">
-    <input type="hidden" name="token" id="token">
+         <!-- Satisfaccion general -->
+        <div class="question active" id="question1">
+          <label>1.	¿Qué tan satisfecho estás con el servicio de soporte recibido en los ultimso 30 dias ?</label>
+          <input type="hidden" name="P1" value="1. Qué tan satisfecho estás con el servicio de soporte recibido en los ultimos 30 dias">
+          <input type="radio" name="calidad_servicio" value="Excelente"> Excelente <br>
+          <input type="radio" name="calidad_servicio" value="Bueno"> Bueno <br>
+          <input type="radio" name="calidad_servicio" value="Regular"> Regular <br>
+          <input type="radio" name="calidad_servicio" value="Malo"> Malo <br>
+          <input type="radio" name="calidad_servicio" value="Muy Malo"> Muy Malo <br>
+        </div>
 
-    <p>1. ¿Cómo calificarías la calidad general del servicio de soporte en los últimos 6 meses?</p>
-    <input type="hidden" name="p1" value="¿Cómo calificarías la calidad general del servicio de soporte en los últimos 6 meses?">
-    <label><input type="radio" name="q1" value="Excelente"> Excelente</label>
-    <label><input type="radio" name="q1" value="Bueno"> Bueno</label>
-    <label><input type="radio" name="q1" value="Normal"> Normal</label>
-    <label><input type="radio" name="q1" value="Malo"> Malo</label>
+        <!-- Tiempo de respuesta -->
+        <div class="question" id="question2">
+          <label>2. ¿Qué tan satisfecho(a) estás con los tiempos de respuesta del servicio de soporte?</label>
+          <input type="hidden" name="P2" value="2. ¿Qué tan satisfecho(a) estás con los tiempos de respuesta del servicio de soporte?">
+          <input type="radio" name="informacion_tickets" value="Muy satisfecho(a)"> Muy satisfecho(a)<br>
+          <input type="radio" name="informacion_tickets" value="Satisfecho(a)"> Satisfecho(a)<br>
+          <input type="radio" name="informacion_tickets" value="Neutral"> Neutral<br>
+          <input type="radio" name="informacion_tickets" value="Insatisfecho(a)"> Insatisfecho(a)<br>
+          <input type="radio" name="informacion_tickets" value="Muy insatisfecho(a)"> Muy insatisfecho(a)<br>
+        </div>
+
+        <!-- Efectividad -->
+        <div class="question" id="question3">
+          <label>3.	¿Qué tan efectiva consideras que fue la resolución de los incidentes reportados?</label>
+          <input type="hidden" name="P3" value="3.	¿Qué tan efectiva consideras que fue la resolución de los incidentes reportados?">
+          <input type="radio" name="Tiempo_resolucion1" value="Muy efectiva"> Muy efectiva <br>
+          <input type="radio" name="Tiempo_resolucion1" value="Efectiva"> Efectiva <br>
+          <input type="radio" name="Tiempo_resolucion1" value="Neutral"> Neutral <br>
+          <input type="radio" name="Tiempo_resolucion1" value="Poco efectiva"> Poco efectiva <br>
+          <input type="radio" name="Tiempo_resolucion1" value="Nada efectiva"> Nada efectiva <br>
+        </div>
+
+        <!-- Comunicación -->
+        <div class="question" id="question4">
+          <label>4. ¿La información proporcionada por el equipo fue clara y fácil de entender?</label>
+          <input type="hidden" name="P4" value="4. ¿La información proporcionada por el equipo fue clara y fácil de entender?">
+          <input type="radio" name="Proactividad" value="Siempre"> Siempre <br>
+          <input type="radio" name="Proactividad" value="Frecuentemente"> Frecuentemente <br>
+          <input type="radio" name="Proactividad" value="A veces"> A veces <br>
+          <input type="radio" name="Proactividad" value="Rara vez"> Rara vez <br>
+          <input type="radio" name="Proactividad" value="Nunca"> Nunca <br>
+        </div>
+
+        <!-- Profesionalismo -->
+        <div class="question" id="question5">
+          <label>5.	¿Cómo calificarías la amabilidad y el profesionalismo del equipo de soporte?</label>
+          <input type="hidden" name="P1" value="5.	¿Cómo calificarías la amabilidad y el profesionalismo del equipo de soporte?">
+          <input type="radio" name="calidad_servicio2" value="Excelente"> Excelente <br>
+          <input type="radio" name="calidad_servicio2" value="Bueno"> Bueno <br>
+          <input type="radio" name="calidad_servicio2" value="Regular"> Regular <br>
+          <input type="radio" name="calidad_servicio2" value="Malo"> Malo <br>
+          <input type="radio" name="calidad_servicio2" value="Muy Malo"> Muy Malo <br>        
+        </div>
+
+        <!-- Disponibilidad -->
+        <div class="question" id="question6">
+          <label>6.  ¿Que tan efectivo es contactar al equipo de soporte cuando lo necesitaste?</label>
+          <input type="hidden" name="P3" value="6.  ¿Que tan efectivo es contactar al equipo de soporte cuando lo necesitaste?">
+          <input type="radio" name="Tiempo_resolucion2" value="Muy efectiva"> Muy efectiva <br>
+          <input type="radio" name="Tiempo_resolucion2" value="Efectiva"> Efectiva <br>
+          <input type="radio" name="Tiempo_resolucion2" value="Neutral"> Neutral <br>
+          <input type="radio" name="Tiempo_resolucion2" value="Poco efectiva"> Poco efectiva <br>
+          <input type="radio" name="Tiempo_resolucion2" value="Nada efectiva"> Nada efectiva <br>
+        </div>
 
 
-    <p>2. ¿Qué tan satisfecho estás con los tiempos de respuesta?</p>
-    <input type="hidden" name="p2" value="¿Qué tan satisfecho estás con los tiempos de respuesta?">
-    <label><input type="radio" name="q2" value="Excelente"> Excelente</label>
-    <label><input type="radio" name="q2" value="Bueno"> Bueno</label>
-    <label><input type="radio" name="q2" value="Normal"> Normal</label>
-    <label><input type="radio" name="q2" value="Malo"> Malo</label>
+<!-- <div class="question" id="question8">
+  <label>9.	¿Qué tan probable es que recomiendes el servicio de soporte a otra empresa? (Escala del 1 al 10, donde 1 es nada probable y 10 es muy probable)</label>
+  <input type="hidden" name="P9" value="9.	¿Qué tan probable es que recomiendes el servicio de soporte a otra empresa? (Escala del 1 al 10, donde 1 es nada probable y 10 es muy probable)">
+  <div class="scale-container">
+    <label class="scale-option">
+      <input type="radio" name="recomendacion" value="1"><span>1</span>
+    </label>
+    <label class="scale-option">
+      <input type="radio" name="recomendacion" value="2"><span>2</span>
+    </label>
+    <label class="scale-option">
+      <input type="radio" name="recomendacion" value="3"><span>3</span>
+    </label>
+    <label class="scale-option">
+      <input type="radio" name="recomendacion" value="4"><span>4</span>
+    </label>
+    <label class="scale-option">
+      <input type="radio" name="recomendacion" value="5"><span>5</span>
+    </label>
+    <label class="scale-option">
+      <input type="radio" name="recomendacion" value="6"><span>6</span>
+    </label>
+    <label class="scale-option">
+      <input type="radio" name="recomendacion" value="7"><span>7</span>
+    </label>
+    <label class="scale-option">
+      <input type="radio" name="recomendacion" value="8"><span>8</span>
+    </label>
+    <label class="scale-option">
+      <input type="radio" name="recomendacion" value="9"><span>9</span>
+    </label>
+    <label class="scale-option">
+      <input type="radio" name="recomendacion" value="10"><span>10</span>
+    </label>
+  </div>
+</div> -->
 
-    <p>3. ¿Qué tan efectivo te pareció el proceso de resolución de incidentes?</p>
-    <input type="hidden" name="p3" value="¿Qué tan efectivo te pareció el proceso de resolución de incidentes?">
-    <label><input type="radio" name="q3" value="Excelente"> Excelente</label>
-    <label><input type="radio" name="q3" value="Bueno"> Bueno</label>
-    <label><input type="radio" name="q3" value="Normal"> Normal</label>
-    <label><input type="radio" name="q3" value="Malo"> Malo</label>
+        <div class="question" id="question10">
+          <label>7.	Desde tu experiencia, ¿qué aspectos del servicio de soporte deberían mejorarse con mayor urgencia?</label>
+          <input type="hidden" name="P10" value="7.	Desde tu experiencia, ¿qué aspectos del servicio de soporte deberían mejorarse con mayor urgencia?">
+          <textarea name="sugerencias" rows="4" ></textarea>
+        </div>
 
-    <p>4. ¿Considerás que el equipo es proactivo ante incidencias recurrentes?</p>
-    <input type="hidden" name="p4" value="¿Considerás que el equipo es proactivo ante incidencias recurrentes?">
-    <label><input type="radio" name="q4" value="Excelente"> Excelente</label>
-    <label><input type="radio" name="q4" value="Bueno"> Bueno</label>
-    <label><input type="radio" name="q4" value="Normal"> Normal</label>
-    <label><input type="radio" name="q4" value="Malo"> Malo</label>
+        <div class="buttons">
+          <button type="button" class="button" id="prevButton" onclick="prevQuestion()" disabled>Anterior</button>
+          <button type="button" class="button" id="nextButton" onclick="nextQuestion()">Siguiente</button>
+        </div>
+        <div class="submit-button-container" id="submitButtonContainer" style="display:none;">
+          <button type="button" class="button submit-button" onclick="submitSurvey()">Enviar Encuesta</button>
+        </div>
+      </form>
+    </div>
 
-    <p>5. ¿Se siente informado sobre el estado de los tickets durante el proceso?</p>
-    <input type="hidden" name="p5" value="¿Se siente informado sobre el estado de los tickets durante el proceso?">
-    <label><input type="radio" name="q5" value="Excelente"> Excelente</label>
-    <label><input type="radio" name="q5" value="Bueno"> Bueno</label>
-    <label><input type="radio" name="q5" value="Normal"> Normal</label>
-    <label><input type="radio" name="q5" value="Malo"> Malo</label>
+    <div id="finalMessage" class="thank-you-message" style="display: none;">
+      <div class="success-icon">&#10004;</div>
+      <p>¡Has finalizado la encuesta online, gracias por participar!</p>
+    </div>
 
-    <p>6. ¿Cómo calificarías la comunicación y el trato del equipo de soporte?</p>
-    <input type="hidden" name="p6" value="¿Cómo calificarías la comunicación y el trato del equipo de soporte?">
-    <label><input type="radio" name="q6" value="Excelente"> Excelente</label>
-    <label><input type="radio" name="q6" value="Bueno"> Bueno</label>
-    <label><input type="radio" name="q6" value="Normal"> Normal</label>
-    <label><input type="radio" name="q6" value="Malo"> Malo</label>
+    <div id="alreadySubmittedMessage" class="already-submitted-message" style="display: none;">
+      <p>Ya has completado esta encuesta anteriormente.</p>
+    </div>
+  </div>
+  <script>
+  let currentQuestionIndex = 0;
+  const questions = document.querySelectorAll('.question');
+  const prevButton = document.getElementById('prevButton');
+  const nextButton = document.getElementById('nextButton');
+  const submitButtonContainer = document.getElementById('submitButtonContainer');
+  const surveyContent = document.getElementById('surveyContent');
+  const finalMessage = document.getElementById('finalMessage');
+  const alreadySubmittedMessage = document.getElementById('alreadySubmittedMessage');
 
-    <p>7. ¿Qué sugerencias tiene para mejorar el servicio?</p>
-    <input type="hidden" name="p7" value="¿Qué sugerencias tiene para mejorar el servicio?">
-    <textarea name="q7" rows="4" cols="50" placeholder="Escribí tus sugerencias aquí..."></textarea>
-
-    <br><br>
-    <input type="submit" value="Enviar encuesta">
-
-    <script>
-        // Capturar la fecha al cargar el formulario
-        const now = new Date();
-        const fechaLocal = now.toLocaleString('sv-SE'); // Formato YYYY-MM-DDTHH:mm:ss
-        document.getElementById('fecha').value = fechaLocal;
-      
-      // Función para obtener parámetros de la URL
-  function getTokenFromUrl() {
+  function getParamsAndCleanURL() {
     const params = new URLSearchParams(window.location.search);
-    return params.get('token');
+
+    // Guardar en sessionStorage
+    if (params.get('IdUsuario')) {
+      sessionStorage.setItem('IdUsuario', params.get('IdUsuario'));
+      //sessionStorage.setItem('Nombre', params.get('Nombre'));
+      //sessionStorage.setItem('Apellido', params.get('Apellido'));
+      //sessionStorage.setItem('Departamento', params.get('Departamento'));
+      sessionStorage.setItem('Token', params.get('Token'));
+    }
+
+    // Llenar campos ocultos desde sessionStorage
+    document.getElementById('IdUsuario').value = sessionStorage.getItem('IdUsuario') || '';
+    //document.getElementById('Nombre').value = sessionStorage.getItem('Nombre') || '';
+    //document.getElementById('Apellido').value = sessionStorage.getItem('Apellido') || '';
+    //document.getElementById('Departamento').value = sessionStorage.getItem('Departamento') || '';
+    document.getElementById('Token').value = sessionStorage.getItem('Token') || '';
+
+    // Limpiar los parámetros de la URL sin recargar la página
+    if (window.location.search.length > 0) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   }
 
-  // Asignar token al campo oculto
-  document.addEventListener("DOMContentLoaded", () => {
-    const tokenField = document.getElementById("token");
-    const token = getTokenFromUrl();
-    if (tokenField && token) {
-      tokenField.value = token;
+// function checkPermissions() {
+//   const idUsuario = document.getElementById('IdUsuario').value.trim();
+//   const nombre = document.getElementById('Nombre').value.trim();
+//   const apellido = document.getElementById('Apellido').value.trim();
+//   const departamento = document.getElementById('Departamento').value.trim();
+//   const token = document.getElementById('Token').value.trim();
+
+//   if (!idUsuario || !nombre || !apellido || !departamento || !token) {
+//     // Ocultar el formulario y botones
+//     document.getElementById('surveyContent').style.display = 'none';
+
+//     // Mostrar mensaje de no permisos
+//     const noPermissionMsg = document.createElement('div');
+//     noPermissionMsg.style.textAlign = 'center';
+//     noPermissionMsg.style.color = 'blue';
+//     noPermissionMsg.style.padding = '20px';
+//     noPermissionMsg.style.border = '1px solid blue';
+//     noPermissionMsg.style.borderRadius = '8px';
+//     noPermissionMsg.style.marginTop = '20px';
+//     noPermissionMsg.textContent = 'No tienes permiso para ver el formulario.Intenta comunicarte con el propietario del formulario si consideras que se trata de un error.';
+
+//     document.querySelector('.survey-container').appendChild(noPermissionMsg);
+
+    // También deshabilitar botones para mayor seguridad
+//     document.getElementById('prevButton').disabled = true;
+//     document.getElementById('nextButton').disabled = true;
+
+//     return false;
+//   }
+//   return true;
+// }
+
+
+  function showQuestion(index) {
+    questions.forEach((q, i) => {
+      q.classList.remove('active', 'error');
+      if (i === index) q.classList.add('active');
+    });
+
+    prevButton.disabled = index === 0;
+    nextButton.style.display = index === questions.length - 1 ? 'none' : 'inline-block';
+    submitButtonContainer.style.display = index === questions.length - 1 ? 'block' : 'none';
+
+    attachRadioListeners();
+  }
+
+  function isValidAnswer(index) {
+    const question = questions[index];
+    const inputs = question.querySelectorAll('input, textarea');
+    for (let input of inputs) {
+      if (input.type === 'radio') {
+        const name = input.name;
+        if (question.querySelector(`input[name="${name}"]:checked`)) {
+          return true;
+        }
+      } else if (input.tagName.toLowerCase() === 'textarea' && input.value.trim() !== '') {
+        return true;
+      }
     }
+    return false;
+  }
+
+  function nextQuestion() {
+    if (!isValidAnswer(currentQuestionIndex)) {
+      questions[currentQuestionIndex].classList.add('error', 'shake');
+      setTimeout(() => questions[currentQuestionIndex].classList.remove('shake'), 500);
+      return;
+    }
+    if (currentQuestionIndex < questions.length - 1) {
+      currentQuestionIndex++;
+      showQuestion(currentQuestionIndex);
+    }
+  }
+
+  function prevQuestion() {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      showQuestion(currentQuestionIndex);
+    }
+  }
+
+  function submitSurvey() {
+  if (!isValidAnswer(currentQuestionIndex)) {
+    questions[currentQuestionIndex].classList.add('error', 'shake');
+    setTimeout(() => questions[currentQuestionIndex].classList.remove('shake'), 500);
+    return;
+  }
+
+  const form = document.getElementById("surveyFormMensual");
+  const formData = new FormData(form);
+
+  fetch(form.action, {
+    method: "POST",
+    body: formData
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Error al enviar la encuesta');
+    }
+    return response.text();
+  })
+  .then(data => {
+    surveyContent.style.display = 'none';
+    finalMessage.style.display = 'block';
+
+    // Marca que ya respondió
+    localStorage.setItem('encuestaCompletada', 'true');
+  })
+  .catch(error => {
+    alert("Ocurrió un error al enviar la encuesta. Intenta nuevamente.");
+    console.error(error);
   });
-      </script>
-  </form>
-</div>
-</body>
+}
+
+
+  function attachRadioListeners() {
+    const radios = questions[currentQuestionIndex].querySelectorAll('input[type="radio"]');
+    radios.forEach(radio => {
+      radio.onclick = () => {
+        if (isValidAnswer(currentQuestionIndex)) {
+          setTimeout(() => nextQuestion(), 200);
+        }
+      };
+    });
+  }
+
+  window.onload = () => {
+  getParamsAndCleanURL();
+
+  // if (!checkPermissions()) {
+  //   // No permisos, no continuar
+  //   return;
+  // }
+
+  if (localStorage.getItem('encuestaCompletada') === 'true') {
+    surveyContent.style.display = 'none';
+    alreadySubmittedMessage.style.display = 'block';
+  } else {
+    showQuestion(currentQuestionIndex);
+  }
+};
+
+</script>
+  
+  </body>
 </html>
+
+
